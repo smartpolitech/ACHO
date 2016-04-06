@@ -6,7 +6,7 @@ import paho.mqtt.client as mqtt
 import os, thread, time, datetime, ephem
 from subprocess import call
 
-ARDUINO = "192.168.0.100"
+ARDUINO = "192.168.0.101"
 
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
