@@ -23,17 +23,21 @@ def on_message(client, userdata, msg):
 
     if(msg.topic=="acho/blind/up"):
         call(["curl", "http://root:opticalflow@" + ARDUINO + "/arduino/command/blindup"])    
+	client.publish('acho/tts', 'Subiendo persiana')
 
     if(msg.topic=="acho/blind/down"):
         call(["curl", "http://root:opticalflow@" + ARDUINO + "/arduino/command/blinddown"])    
+	client.publish('acho/tts', 'Bajando persiana')
 
     if(msg.topic=="acho/blind/stop"):
         call(["curl", "http://root:opticalflow@" +ARDUINO + "/arduino/command/blindstop"])    
+	client.publish('acho/tts', 'Parando persiana')
 
 
 def blindController():
     print "Entering lind controller"
     while True:
+	print "Checking sunset at ", str(datetime.datetime.now())
         o=ephem.Observer()  
         o.lat='39.4'  
         o.long='-6.3'  
