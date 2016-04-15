@@ -6,105 +6,92 @@ import os
 from subprocess import call
 
 num_lights = None
-lifx = LifxLAN(num_lights)
+lifx = LifxLAN(verbose = False)
 config = ConfigParser.RawConfigParser()
+
 devices = lifx.get_lights()
+print("\n {} luces encontradas \n".format(len(devices)))
+for d in devices:
+        print d.mac_addr, d.port, d.service, d.source_id, d.ip_addr
+
 bombilla1 = 'd0:73:d5:10:7b:0e'
 bombilla2 = 'd0:73:d5:10:7f:33'
-
+#devices = {}
+#devices[bombilla1] = Light(bombilla1, 1, 56700, 542952283, "192.168.0.102")
+#devices[bombilla2] = Light(bombilla2, 1, 56700, 542952283, "192.168.0.103")
 
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code " + str(rc))
+    client.subscribe("acho/lights/#")
 
-    # Subscribing in on_connect() means that if we lose the connection and
-    # reconnect then subscriptions will be renewed.
-    client.subscribe("acho/bombillas/#")
-
+def turn_light_on(lights):
+	for l in lights:
+		d = [x for x in devices if x.mac_addr == l][0]
+		d.set_power("on");
+    
+def turn_light_off(lights):
+	for l in lights:
+		d = [x for x in devices if x.mac_addr == l][0]
+		d.set_power("off")
+		
+topics = {"acho/lights/on/all":  { "command": turn_light_on, "params": [bombilla1, bombilla2], "text": "encendiendo bombillas" },
+		  "acho/lights/off/all": { "command": turn_light_off, "params": [bombilla1, bombilla2],  "text": "apagando bombillas" },
+  		  "acho/lights/on/1": 	 { "command": turn_light_on, "params": [bombilla1], "text" : "encendiendo bombilla 1" },
+  		  "acho/lights/on/2": 	 { "command": turn_light_on, "params": [bombilla2], "text" : "encendiendo bombilla 2" },
+		  "acho/lights/off/1": 	 { "command": turn_light_off, "params": [bombilla1], "text" : "apagando  bombilla 1" }
+		  "acho/lights/off/2": 	 { "command": turn_light_off, "params": [bombilla2], "text" : "apagando bombilla 2" }
+		  
+		 
+		  }
 
 def on_message(client, userdata, msg):
-
-    if (msg.topic == "acho/bombillas/enciende1"):
-        discover()
-        client.publish("acho/bombillas", "encendiendo bombilla 1")
-        turn_light_on(bombilla1)
-    elif (msg.topic == "acho/bombillas/enciende2"):
-        discover()
-        client.publish("acho/bombillas", "encendiendo bombilla 2")
-        turn_light_on(bombilla2)
-    elif (msg.topic == "acho/bombillas/enciende"):
-        print "hola que ase"
-        discover()
-        client.publish("acho/bombillas", "encendiendo bombillas")
-        turn_light_on(bombilla1)
-        turn_light_on(bombilla2)
-    elif (msg.topic == "acho/bombillas/apaga1"):
-        print "topic recibido"
-        discover()
-        client.publish("acho/bombillas", "encendiendo bombilla 1")
-        turn_light_off(bombilla1)
-    elif (msg.topic == "acho/bombillas/apaga2"):
-        discover()
-        client.publish("acho/bombillas", "encendiendo bombilla 2")
-        turn_light_off(bombilla2)
-        print "topic recibido"
-    elif (msg.topic == "acho/bombillas/apaga"):
-        print "topic recibido"
-        discover()
-        client.publish("acho/bombillas", "encendiendo bombillas")
-        turn_light_off(bombilla1)
-        turn_light_off(bombilla2)
-    elif (msg.topic == "acho/bombillas/unpocobrillo1"):
-        discover()
-        client.publish("acho/bombillas", "encendiendo bombilla 1")
-        control_percentual_vble_B(bombilla1)
-    elif (msg.topic == "acho/bombillas/unpocobrillo2"):
-        discover()
-        client.publish("acho/bombillas", "encendiendo bombilla 2")
-        control_percentual_vble_B(bombilla2)
-    elif (msg.topic == "acho/bombillas/unpocobrillo"):
-        discover()
-        client.publish("acho/bombillas", "encendiendo bombillas")
-        control_percentual_vble_B(bombilla1)
-        control_percentual_vble_B(bombilla2)
-    elif (msg.topic == "acho/bombillas/brillo1"):
-        discover()
-        client.publish("acho/bombillas", "encendiendo bombilla 1")
-        control_percentual_total_B(bombilla1)
-    elif (msg.topic == "acho/bombillas/brillo2"):
-        discover()
-        client.publish("acho/bombillas", "encendiendo bombilla 2")
-        control_percentual_total_B(bombilla2)
-    elif (msg.topic == "acho/bombillas/brillo"):
-        discover()
-        client.publish("acho/bombillas", "encendiendo bombillas")
-        control_percentual_total_B(bombilla1)
-        control_percentual_total_B(bombilla2)
-    elif (msg.topic == "acho/bombillas/unpococolor1"):
-        discover()
-        client.publish("acho/bombillas", "encendiendo bombilla 1")
-        control_percentual_vble_K(bombilla1)
-    elif (msg.topic == "acho/bombillas/unpococolor2"):
-        discover()
-        client.publish("acho/bombillas", "encendiendo bombilla 2")
-        control_percentual_vble_K(bombilla2)
-    elif (msg.topic == "acho/bombillas/unpococolor"):
-        discover()
-        client.publish("acho/bombillas", "encendiendo bombillas")
-        control_percentual_vble_K(bombilla1)
-        control_percentual_vble_K(bombilla2)
-    elif (msg.topic == "acho/bombillas/color1"):
-        discover()
-        client.publish("acho/bombillas", "encendiendo bombilla 1")
-        control_percentual_total_K(bombilla1)
-    elif (msg.topic == "acho/bombillas/color2"):
-        discover()
-        client.publish("acho/bombillas", "encendiendo bombilla 2")
-        control_percentual_total_K(bombilla2)
-    elif (msg.topic == "acho/bombillas/color"):
-        discover()
-        client.publish("acho/bombillas", "encendiendo bombillas")
-        control_percentual_total_K(bombilla1)
-        control_percentual_total_K(bombilla2)
+	print "topic", msg.topic
+	if msg.topic in topics:
+		t = topics[msg.topic]
+		client.publish("acho/tts", t["text"])
+		t["command"](t["params"]) 	
+    
+    #elif (msg.topic == "acho/bombillas/unpocobrillo1"):
+        #client.publish("acho/tts", "encendiendo bombilla 1")
+        #control_percentual_vble_B(bombilla1)
+    #elif (msg.topic == "acho/bombillas/unpocobrillo2"):
+        #client.publish("acho/tts", "encendiendo bombilla 2")
+        #control_percentual_vble_B(bombilla2)
+    #elif (msg.topic == "acho/bombillas/unpocobrillo"):
+        #client.publish("acho/tts", "encendiendo bombillas")
+        #control_percentual_vble_B(bombilla1)
+        #control_percentual_vble_B(bombilla2)
+    #elif (msg.topic == "acho/bombillas/brillo1"):
+        #client.publish("acho/tts", "encendiendo bombilla 1")
+        #control_percentual_total_B(bombilla1)
+    #elif (msg.topic == "acho/bombillas/brillo2"):
+        #client.publish("acho/tts", "encendiendo bombilla 2")
+        #control_percentual_total_B(bombilla2)
+    #elif (msg.topic == "acho/bombillas/brillo"):
+        #client.publish("acho/tts", "encendiendo bombillas")
+        #control_percentual_total_B(bombilla1)
+        #control_percentual_total_B(bombilla2)
+    #elif (msg.topic == "acho/bombillas/unpococolor1"):
+        #client.publish("acho/tts", "encendiendo bombilla 1")
+        #control_percentual_vble_K(bombilla1)
+    #elif (msg.topic == "acho/bombillas/unpococolor2"):
+        #discover()
+        #client.publish("acho/tts", "encendiendo bombilla 2")
+        #control_percentual_vble_K(bombilla2)
+    #elif (msg.topic == "acho/bombillas/unpococolor"):
+        #client.publish("acho/bombillas", "encendiendo bombillas")
+        #control_percentual_vble_K(bombilla1)
+        #control_percentual_vble_K(bombilla2)
+    #elif (msg.topic == "acho/bombillas/color1"):
+        #client.publish("acho/tts", "encendiendo bombilla 1")
+        #control_percentual_total_K(bombilla1)
+    #elif (msg.topic == "acho/bombillas/color2"):
+        #client.publish("acho/tts", "encendiendo bombilla 2")
+        #control_percentual_total_K(bombilla2)
+    #elif (msg.topic == "acho/bombillas/color"):
+        #client.publish("acho/tts", "encendiendo bombillas")
+        #control_percentual_total_K(bombilla1)
+        #control_percentual_total_K(bombilla2)
 
 
 def discover():
@@ -125,32 +112,6 @@ def discover():
         #     with open('bulbs.cfg', 'wb') as configfile:
         #         config.write(configfile)
 
-
-def turn_light_on(light):
-    global num_lights
-    global lifx
-    global config
-    global devices
-    lifx = LifxLAN(num_lights)
-    for d in devices:
-        if d.get_mac_addr() == light:
-            bombilla = d
-            break
-    bombilla.set_power("on")
-    print (bombilla.get_color())
-
-
-def turn_light_off(light):
-    global num_lights
-    global lifx
-    global config
-    global devices
-    lifx = LifxLAN(num_lights)
-    for d in devices:
-        if d.get_mac_addr() == light:
-            bombilla = d
-            break
-    bombilla.set_power("off")
 
 
 # FROM 0 to 65535
@@ -302,7 +263,7 @@ def control_percentual_total_B(light):
     for d in devices:
         if d.get_mac_addr() == light:
             bombilla = d
-            break
+            
     ogcolor = bombilla.get_color()
     if ogcolor[2] <= 3650:
         for i in range(ogcolor[3], 3650, 100):

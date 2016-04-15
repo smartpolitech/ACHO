@@ -8,7 +8,6 @@ client = mqtt.Client()
 client.connect("localhost", 1883, 60)
 print "Connected to Mosquitto broker"
 
-#TOKEN = '186444357:AAFEmRGWuU6dj493QkS99gRPHdxGdEQaGeU'
 TOKEN = '205601802:AAHkJYiNdXXG1p5XPOWqq5l_L334H-VJHzc'
 
 bot = telebot.TeleBot(TOKEN)
@@ -18,7 +17,6 @@ def funpersiana(cid):
     markup.row('subir', 'parar', 'bajar')
     markup.row('retroceder')
     bot.send_message(cid, "Elija la opcion que desea, o retroceder para volver atras", None, None, markup)
-
 
 def funbombilla(cid):
     markup = types.ReplyKeyboardMarkup(one_time_keyboard=False)
@@ -39,41 +37,73 @@ def retroceder(cid):
     markup.row('bombilla')
     markup.row('television')
     bot.send_message(cid, "Elija la opcion que desea", None, None, markup)
-
+    
+def publish(topic):
+	client.reconnect()    
+	client.publish(topic, "")
+	
+topics = {"persiana":  { "command": funpersiana, "params": "cid", "text": "" },
+		  "bombilla":  { "command": funbombilla, "params": "cid",  "text": "" },
+  		  "television":{ "command": funtelevision, "params": "cid", "text" : "" },
+  		  "retroceder":{ "command": retroceder, "params": "cid", "text" : "" },
+		  "subir": 	   { "command": publish, "params": "acho/blind/up", "text" : "" },
+		  "bajar": 	   { "command": publish, "params": "acho/blind/down", "text" : "" },
+  		  "parar": 	   { "command": publish, "params": "acho/blind/stop", "text" : "" },
+		  "power": 	   { "command": publish, "params": "acho/tv/power", "text" : "" },
+		  "encender":  { "command": publish, "params": "acho/lights/on/all", "text" : "" },
+		  "apagar":    { "command": publish, "params": "acho/lights/off/all", "text" : "" }
+		  }
 
 def listener(messages):
-    for m in messages:
-        if m.content_type == 'text':
-            cid = m.chat.id
-            print "[" + str(cid) + "]: " + m.text
+	for m in messages:
+		if m.content_type == 'text':
+			cid = m.chat.id
+			print "[" + str(cid) + "]: " + m.text
 
-            if m.text.find("persiana") != -1:
-                funpersiana(cid)
+			t = topics[m.text]
+			if t["params"] == "cid":
+				t["command"](cid)
+			else:
+				t["command"](t["params"])
+				
+				
+            #if m.text.find("persiana") != -1:
+                #funpersiana(cid)
 
-            elif m.text.find("bombilla") != -1:
-                funbombilla(cid)
+            #elif m.text.find("bombilla") != -1:
+                #funbombilla(cid)
 
-            elif m.text.find("television") != -1:
-                funtelevision(cid)
+            #elif m.text.find("television") != -1:
+                #funtelevision(cid)
 
-            elif m.text.find("retroceder") != -1:
-                retroceder(cid)
+            #elif m.text.find("retroceder") != -1:
+                #retroceder(cid)
                 
-            elif m.text.find("subir")  != -1:
-                print "Curl subir la persiana"
-                client.publish('acho/blind/up', '')
+            #elif m.text.find("subir")  != -1:
+                #print "Curl subir la persiana"
+                #publish('acho/blind/up', '')
 
-            elif m.text.find("bajar")  != -1:
-                print "curl bajar la persiana"
-                client.publish('acho/blind/down', '')
+            #elif m.text.find("bajar")  != -1:
+                #print "curl bajar la persiana"
+                #publish('acho/blind/down', '')
 
-            elif m.text.find("parar")  != -1:
-                print "curl parar la persiana"
-                client.publish('acho/blind/stop', '')
+            #elif m.text.find("parar")  != -1:
+                #print "curl parar la persiana"
+                #publish('acho/blind/stop', '')
 
-            elif m.text.find("power")  != -1:
-                print "curl apagar tele"
-                client.publish('acho/tv/power', '')
+            #elif m.text.find("power")  != -1:
+                #print "curl apagar tele"
+                #publish('acho/tv/power', '')
+                
+	    #elif m.text.find("encender")  != -1:
+                #print "Encendiendo las luces"
+                #publish('acho/lights/on/all', '')
+
+            #elif m.text.find("apagar")  != -1:
+                #print "apagando las luces"
+                #publish('acho/lights/off/all', '')
+                
+	
 
 
 bot.set_update_listener(listener)
@@ -85,4 +115,5 @@ def command_start(m):
 
 print "polling.."
 
-bot.polling(none_stop=True)
+bot.polling(none_stop=False)
+	

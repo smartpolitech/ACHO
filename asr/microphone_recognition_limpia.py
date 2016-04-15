@@ -15,7 +15,7 @@ try:
     # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
     # instead of `r.recognize_google(audio)`
     respuesta = r.recognize_google(audio)
-    if respuesta=="auto":
+    if respuesta == "auto":
         print("ha dicho auto")
     print("    Google Speech Recognition DICE QUE HAS DICHO \n \n" + respuesta + "\n")
 except sr.UnknownValueError:
