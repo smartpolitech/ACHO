@@ -43,26 +43,20 @@ stream = p.open(format=FORMAT,
                 frames_per_buffer=CHUNK,
                 stream_callback=callback)
 
-def listen():    
-	global request, vad
-	print "Listening..."
-	stream.start_stream()
+print "Listening..."
+stream.start_stream()
 	    
-	while stream.is_active():
-		time.sleep(0.1)
+while stream.is_active():
+	time.sleep(0.1)
        
-	stream.stop_stream()
-	response = request.getresponse()
-	data = response.read()
-	print data
-	vad = apiai.VAD()
-	request = ai.voice_request()
-	request.lang = 'es'
+stream.stop_stream()
+response = request.getresponse()
+data = response.read()
+print data
+#vad = apiai.VAD()
+#request = ai.voice_request()
+#request.lang = 'es'
 
-    
-
-while True:
-	listen()
 	
 p.terminate()
 
