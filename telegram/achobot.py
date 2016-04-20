@@ -66,45 +66,6 @@ def listener(messages):
 			else:
 				t["command"](t["params"])
 				
-				
-            #if m.text.find("persiana") != -1:
-                #funpersiana(cid)
-
-            #elif m.text.find("bombilla") != -1:
-                #funbombilla(cid)
-
-            #elif m.text.find("television") != -1:
-                #funtelevision(cid)
-
-            #elif m.text.find("retroceder") != -1:
-                #retroceder(cid)
-                
-            #elif m.text.find("subir")  != -1:
-                #print "Curl subir la persiana"
-                #publish('acho/blind/up', '')
-
-            #elif m.text.find("bajar")  != -1:
-                #print "curl bajar la persiana"
-                #publish('acho/blind/down', '')
-
-            #elif m.text.find("parar")  != -1:
-                #print "curl parar la persiana"
-                #publish('acho/blind/stop', '')
-
-            #elif m.text.find("power")  != -1:
-                #print "curl apagar tele"
-                #publish('acho/tv/power', '')
-                
-	    #elif m.text.find("encender")  != -1:
-                #print "Encendiendo las luces"
-                #publish('acho/lights/on/all', '')
-
-            #elif m.text.find("apagar")  != -1:
-                #print "apagando las luces"
-                #publish('acho/lights/off/all', '')
-                
-	
-
 
 bot.set_update_listener(listener)
 
