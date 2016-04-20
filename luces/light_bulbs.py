@@ -34,13 +34,13 @@ def turn_light_off(lights):
 		d = [x for x in devices if x.mac_addr == l][0]
 		d.set_power("off")
 		
-topics = {"acho/lights/on/all":  { "command": turn_light_on, "params": [bombilla1, bombilla2], "text": "encendiendo bombillas" },
-		  "acho/lights/off/all": { "command": turn_light_off, "params": [bombilla1, bombilla2],  "text": "apagando bombillas" },
-  		  "acho/lights/on/1": 	 { "command": turn_light_on, "params": [bombilla1], "text" : "encendiendo bombilla 1" },
-  		  "acho/lights/on/2": 	 { "command": turn_light_on, "params": [bombilla2], "text" : "encendiendo bombilla 2" },
-		  "acho/lights/off/1": 	 { "command": turn_light_off, "params": [bombilla1], "text" : "apagando  bombilla 1" }
-		  "acho/lights/off/2": 	 { "command": turn_light_off, "params": [bombilla2], "text" : "apagando bombilla 2" }
-		  
+topics = {"acho/lights/on/all":  { "command": turn_light_on, "params": [bombilla1, bombilla2], "text": "encendiendo luces" },
+		  "acho/lights/off/all": { "command": turn_light_off, "params": [bombilla1, bombilla2],  "text": "apagando luces" },
+  		  "acho/lights/on/1": 	 { "command": turn_light_on, "params": [bombilla1], "text" : "encendiendo luz uno" },
+  		  "acho/lights/on/2": 	 { "command": turn_light_on, "params": [bombilla2], "text" : "encendiendo luz dos" },
+		  "acho/lights/off/1": 	 { "command": turn_light_off, "params": [bombilla1], "text" : "apagando  luz uno" }
+		  "acho/lights/off/2": 	 { "command": turn_light_off, "params": [bombilla2], "text" : "apagando luz dos" }
+		  "acho/lights/brightnessup" :  
 		 
 		  }
 
@@ -180,16 +180,7 @@ def modify_K(light, quantity):
 
 
 def control_percentual_vble_K(light):
-    global num_lights
-    global lifx
-    global config
-    global devices
-    lifx = LifxLAN(num_lights)
-    devices = lifx.get_lights()
-    for d in devices:
-        if d.get_mac_addr() == light:
-            bombilla = d
-            break
+    
     ogcolor = bombilla.get_color()
     quantity = ogcolor[3] * 0.1
     if ogcolor[3] <= quantity:
