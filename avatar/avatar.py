@@ -5,17 +5,38 @@ from pygame.locals import *
 from time import *
 import re
 
-pygame.init()
-windowSurface = pygame.display.set_mode((259, 271), 0, 32)
-pygame.display.set_caption("Cara animada")
-
 BACKGROUND = (255, 255, 255)
 
-windowSurface.fill(BACKGROUND)
-img=pygame.image.load('animate/face_normal_random.png')
-windowSurface.blit(img,(0,0))
-pygame.display.update()
+def hide():
+	global ishide
+	ishide = True
+	pygame.display.iconify()
+	return
+
+def show():
+	pygame.display.quit()
+	pygame.display.init()
+	windowSurface = pygame.display.set_mode((259, 271), 0, 32)
+	pygame.display.set_caption("avatar")
+
+	windowSurface.fill(BACKGROUND)
+	img=pygame.image.load('animate/face_normal_random.png')
+	windowSurface.blit(img,(0,0))
+	pygame.display.update()
+	return
+
+def Timer():
+	tfinish = time()
+	if ((tfinish - tstart >= 20.0)): 
+		hide()	
+	return
+
+show()
 sleep(0.2)
+global tstart
+tstart = time()
+global ishide
+ishide = False
 
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
@@ -30,21 +51,17 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
   
     if(msg.topic=="acho/avatar/show"):
-	pygame.display.quit();
-	pygame.display.init();
-	windowSurface = pygame.display.set_mode((259, 271), 0, 32)
-	pygame.display.set_caption("Cara animada")
-
-	windowSurface.fill(BACKGROUND)
-	img=pygame.image.load('animate/face_normal_random.png')
-	windowSurface.blit(img,(0,0))
-	pygame.display.update()
+	show()
 
     if(msg.topic=="acho/avatar/hide"):
-	pygame.display.iconify();
+	hide()
 
     if(msg.topic=="acho/tts"):
 	print "topic tts recibido"
+
+	if(ishide):
+		show()
+
 	windowSurface = pygame.display.set_mode((259, 271), 0, 32)
 	paragraph = str(msg.payload) 
 	paragraph = re.sub('[!,;?]', '.', paragraph)
@@ -58,7 +75,6 @@ def on_message(client, userdata, msg):
 			timePerChar = 0.444/float(len(word))
 			for char in word:
 
-				#print char
 				rand = random.randrange(2)
 				windowSurface.fill(BACKGROUND)
 
@@ -128,7 +144,9 @@ def on_message(client, userdata, msg):
 		pygame.display.update()
 		sleep(0.4)
 
-	sleep(1)
+	sleep(1)	
+	global tstart
+	tstart = time()
 
 client = mqtt.Client()
 client.on_connect = on_connect
@@ -136,5 +154,7 @@ client.on_message = on_message
 client.connect("localhost", 1883, 60)
 print "Connected to Mosquitto broker"
 
-client.loop_forever()
+while True:
+	Timer()
+	client.loop()   
 
