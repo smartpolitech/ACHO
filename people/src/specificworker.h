@@ -31,6 +31,7 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/core.hpp>        // Basic OpenCV structures (cv::Mat)
 #include <opencv2/highgui/highgui.hpp>  
+#include "opencv2/video/tracking.hpp"
 #include <iostream>
 #include <fstream>
 
