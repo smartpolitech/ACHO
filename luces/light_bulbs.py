@@ -38,9 +38,9 @@ topics = {"acho/lights/on/all":  { "command": turn_light_on, "params": [bombilla
 		  "acho/lights/off/all": { "command": turn_light_off, "params": [bombilla1, bombilla2],  "text": "apagando luces" },
   		  "acho/lights/on/1": 	 { "command": turn_light_on, "params": [bombilla1], "text" : "encendiendo luz uno" },
   		  "acho/lights/on/2": 	 { "command": turn_light_on, "params": [bombilla2], "text" : "encendiendo luz dos" },
-		  "acho/lights/off/1": 	 { "command": turn_light_off, "params": [bombilla1], "text" : "apagando  luz uno" }
+		  "acho/lights/off/1": 	 { "command": turn_light_off, "params": [bombilla1], "text" : "apagando  luz uno" },
 		  "acho/lights/off/2": 	 { "command": turn_light_off, "params": [bombilla2], "text" : "apagando luz dos" }
-		  "acho/lights/brightnessup" :  
+		  #"acho/lights/brightnessup" :  
 		 
 		  }
 

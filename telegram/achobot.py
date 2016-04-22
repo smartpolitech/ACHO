@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import telebot  # Librería de la API del bot.
-from telebot import types  # Tipos para la API del bot.
-import time  # Librería para hacer que el programa que controla el bot no se acabe.
+#from telebot import types  # Tipos para la API del bot.
+import time, sys  # Librería para hacer que el programa que controla el bot no se acabe.
 import paho.mqtt.client as mqtt
+import requests
 
 client = mqtt.Client()
 client.connect("localhost", 1883, 60)
@@ -54,18 +55,36 @@ topics = {"persiana":  { "command": funpersiana, "params": "cid", "text": "" },
 		  "apagar":    { "command": publish, "params": "acho/lights/off/all", "text" : "" }
 		  }
 
+def dateStringFromTimestamp(t):
+	return str(time.strftime("%Y%m%d%H%M%S", time.localtime(float(t))))
+
 def listener(messages):
 	for m in messages:
 		if m.content_type == 'text':
 			cid = m.chat.id
 			print "[" + str(cid) + "]: " + m.text
-
 			t = topics[m.text]
 			if t["params"] == "cid":
 				t["command"](cid)
 			else:
 				t["command"](t["params"])
-				
+		elif m.content_type == 'voice':
+			d = dateStringFromTimestamp(m.date)
+			file_path = d + '_voice.ogg'
+			print file_path, m.voice.file_id
+			file_info = bot.get_file(m.voice.file_id)
+			print file_info
+			print 'https://api.telegram.org/file/bot{0}/{1}'.format(TOKEN, file_info.file_path)
+			
+			#fich = requests.get('https://api.telegram.org/file/bot{0}/{1}'.format(TOKEN, file_info.file_path))
+			fich = os.system('''curl requests.get('https://api.telegram.org/file/bot{0}/{1}'.format(TOKEN, file_info.file_path))''')
+			
+			#bot.downloadFile(m.voice.file_id, file_path)
+			#print m.voice.file_info.file_path
+			os.system('')
+			print m.voice.file_id
+			client.publish('/acho/asr/wavfile', 'audio.wav')
+
 
 bot.set_update_listener(listener)
 
@@ -76,5 +95,12 @@ def command_start(m):
 
 print "polling.."
 
-bot.polling(none_stop=False)
+#bot.notifyOnMessage(self.handle)
+
+while True:
+	try:
+		bot.polling(none_stop=False)
+	except:
+		print "Unexpected error:", sys.exc_info()[0]
+    	time.sleep(10)
 	
