@@ -19,6 +19,7 @@ def on_message(client, userdata, msg):
         print "topic power recibido"
 	# obtain audio from the microphone
 	r = sr.Recognizer()
+        print msg.payload
 	with sr.WavFile(msg.payload) as source:
 	    audio = r.record(source)
 	# recognize speech using Google Speech Recognition
