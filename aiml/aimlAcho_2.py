@@ -32,29 +32,12 @@ def on_message(client, userdata, msg):
         print "topic nlp recibido"
         par = parse(msg.payload)
         print par
-"""        
-        for p in par:
-            print "p", p
-            if p in coms.keys():
-                acs = coms[p]
-                print "acs", acs
-                for p2 in par:
-                    if p2 in acs.keys():
-                        print "accion",acs[p2]
-                        client.publish(acs[p2],"")
-"""                
+
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 client.connect("localhost", 1883, 60)
 print "Connected to Mosquitto broker"
-
-while True:
-    try:
-        client.loop_forever()
-    except:
-        time.sleep(5)
-
 
 # The Kernel object is the public interface to
 # the AIML interpreter.
@@ -72,3 +55,9 @@ kernel.respond("LOAD AIML B")
 #while True: 
 #	print kernel.respond(raw_input("HABLAME...> "))
 print kernel.respond(msg.payload)
+
+while True:
+    try:
+        client.loop_forever()
+    except:
+        time.sleep(5)
