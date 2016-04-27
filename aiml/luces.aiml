@@ -4,36 +4,35 @@
 
   <aiml version="1.0"> 
 
-<!-- Free software Copyright © ALICE A.I. Foundation. --> 
+<!-- Free software Copyright Â© ACHO A.I. Foundation. --> 
 <!-- This program is open source code released under --> 
 <!-- the terms of the GNU General Public License --> 
 <!-- as published by the Free Software Foundation. --> 
 <!-- Complies with AIML 1.01 Tag Set Specification --> 
-<!-- as adopted by the ALICE A.I. Foundation. --> 
+<!-- as adopted by the ACHO A.I. Foundation. --> 
 <!-- acho.aiml: General discussion topics in AIML --> 
 <!-- Created by Adam Codony aka XGargoyle, October 24th, 2005 --> 
 <!-- Revision Sara-0.02 --> 
 <!-- Last Modified March 15th, 2006 -->
 
-<!-- Software Libre Copyright © ALICE A.I. Foundation. --> 
-<!-- Este programa es de código abierto y publicado bajo --> 
-<!-- los términos de la licencia "GNU General Public License" --> 
+<!-- Software Libre Copyright Â© ACHO A.I. Foundation. --> 
+<!-- Este programa es de cÃ³digo abierto y publicado bajo --> 
+<!-- los tÃ©rminos de la licencia "GNU General Public License" --> 
 <!-- tal como establece la Free Software Foundation. --> 
-<!-- Cumple con la especificación de AIML 1.01 --> 
-<!-- adoptada por la ALICE A.I. Foundation. --> 
-<!-- Sara.aiml: Temas de discusión general en AIML --> 
-<!-- Creado por Adam Codony aka XGargoyle, Octubre 24, 2005 --> 
-<!-- Versión ACHO-1.00 --> 
-<!-- Última Modificación Marzo 15, 2006 -->
+<!-- Cumple con la especificaciÃ³n de AIML 1.01 --> 
+<!-- adoptada por la ACHO A.I. Foundation. --> 
+<!-- Sara.aiml: Temas de discusiÃ³n general en AIML --> 
+<!-- Creado por Santiago Vargas , Abril, 2016 --> 
+<!-- VersiÃ³n ACHO-2.00 --> 
 
   
 	 <category> 
       <pattern>LUCES</pattern>
       <template> 
         <random> 
-          <li>¿Si?</li>
+          <li>Â¿Si?</li>
           <li>Dime.</li>
-          <li>¿Qué deseas?</li>
+          <li>Â¿QuÃ© deseas?</li>
         </random>
       </template>
     </category>
@@ -55,28 +54,56 @@
       <pattern>_ LUCES *</pattern>
       <template> 
         <sr/>
-        <!-- convierte la palabra ACHO en null  -->
+        <!-- convierte la palabra LUCES en null  -->
       </template>
     </category>
     
+    <category>
+      <pattern>ENCENDER LUCES</pattern>
+       <template> 
+         <random> 
+            <!--li>Â¿CuÃ¡nto deseas bajar?</li> -->
+            <li>acho/lights/on/all</li>
+	 </random>
+       </template>
+    </category>
     
-    	<category>
-	<pattern>ENCENDER LUCES</pattern>
+     <category>
+      <pattern>PREDER LUCES</pattern>
+       <template> 
+         <random> 
+            <!--li>Â¿CuÃ¡nto deseas bajar?</li> -->
+            <li>acho/lights/on/all</li>
+	 </random>
+       </template>
+    </category>   
+    
+     <category>
+	<pattern>ENCENDER LUZ UNO</pattern>
       <template> 
         <random> 
-            <!--li>¿Cuánto deseas bajar?</li> -->
-            <li>Encendiendo luces</li>
+            <!--li>Â¿CuÃ¡nto deseas bajar?</li> -->
+            <li>acho/lights/on/1</li>
 	</random>
       </template>
     </category>
     
+    <category>
+	<pattern>ENCENDER LUZ DOS</pattern>
+      <template> 
+        <random> 
+            <!--li>Â¿CuÃ¡nto deseas bajar?</li> -->
+            <li>acho/lights/on/2</li>
+	</random>
+      </template>
+    </category>
     
     	<category>
 	<pattern>APAGAR LUCES</pattern>
       <template> 
         <random> 
-            <!--li>¿Cuánto deseas bajar?</li> -->
-            <li>Apagando luces</li>
+            <!--li>Â¿CuÃ¡nto deseas bajar?</li> -->
+            <li>acho/lights/off/all</li>
 	</random>
       </template>
     </category>
@@ -86,7 +113,7 @@
 	<pattern>AUMENTAR INTENSIDAD</pattern>
       <template> 
         <random> 
-            <!--li>¿Cuánto deseas bajar?</li> -->
+            <!--li>Â¿CuÃ¡nto deseas bajar?</li> -->
             <li>aumentar intensidad</li>
 	</random>
       </template>
@@ -97,7 +124,7 @@
 	<pattern>BAJAR INTENSIDAD</pattern>
       <template> 
         <random> 
-            <!--li>¿Cuánto deseas bajar?</li> -->
+            <!--li>Â¿CuÃ¡nto deseas bajar?</li> -->
             <li>bajar intensidad</li>
 	</random>
       </template>
