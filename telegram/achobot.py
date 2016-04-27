@@ -82,13 +82,10 @@ def listener(messages):
 			with open(file_path, 'w') as outfile:
 				outfile.write(audioFile)
 			file_path_out = file_path[:-4]+'.wav'
-			command = "ffmpeg -i "+os.getcwd()+"/"+file_path+" "+os.getcwd()+"/"+file_path_out
+			command = "ffmpeg -loglevel quiet -i "+os.getcwd()+"/"+file_path+" "+os.getcwd()+"/"+file_path_out
 			os.system(command)
-			client.publish('acho/asr/wavfile', os.getcwd()+"/"+file_path_out)
-
-
-bot.set_update_listener(listener)
-
+			client.publish('acho/asr/wavfile',os.getcwd()+"/"+file_path_out)
+			
 @bot.message_handler(commands=['start'])
 def command_start(m):
     cid = m.chat.id
@@ -97,6 +94,7 @@ def command_start(m):
 print "polling.."
 
 #bot.notifyOnMessage(self.handle)
+bot.set_update_listener(listener)
 
 while True:
 	try:
