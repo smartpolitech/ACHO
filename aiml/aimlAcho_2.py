@@ -70,4 +70,4 @@ kernel.respond("LOAD AIML B")
 # line and printing responses.
 #while True: 
 #	print kernel.respond(raw_input("HABLAME...> "))
-print kernel.respond((msg.payload)
+print kernel.respond(msg.payload)
