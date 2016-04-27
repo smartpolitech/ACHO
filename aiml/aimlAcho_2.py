@@ -15,8 +15,6 @@ def parse(text):
     #print "tagged", tagged
     return tokens
 
-
-
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
@@ -27,11 +25,11 @@ def on_connect(client, userdata, flags, rc):
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
-
     if(msg.topic=="acho/nlp"):
         print "topic nlp recibido"
         par = parse(msg.payload)
         print par
+
 
 client = mqtt.Client()
 client.on_connect = on_connect
@@ -47,14 +45,13 @@ kernel = aiml.Kernel()
 # of an AIML file into the Kernel.
 kernel.learn("inicial.xml")
 
-
 kernel.respond("LOAD AIML B")
 
 # Loop forever, reading user input from the command
 # line and printing responses.
 #while True: 
 #	print kernel.respond(raw_input("HABLAME...> "))
-print kernel.respond(msg.payload)
+print kernel.respond(par)
 
 while True:
     try:
