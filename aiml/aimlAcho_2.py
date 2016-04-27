@@ -31,12 +31,6 @@ def on_message(client, userdata, msg):
         print par
 
 
-client = mqtt.Client()
-client.on_connect = on_connect
-client.on_message = on_message
-client.connect("localhost", 1883, 60)
-print "Connected to Mosquitto broker"
-
 # The Kernel object is the public interface to
 # the AIML interpreter.
 kernel = aiml.Kernel()
@@ -52,6 +46,13 @@ kernel.respond("LOAD AIML B")
 #while True: 
 #	print kernel.respond(raw_input("HABLAME...> "))
 print kernel.respond(par)
+
+
+client = mqtt.Client()
+client.on_connect = on_connect
+client.on_message = on_message
+client.connect("localhost", 1883, 60)
+print "Connected to Mosquitto broker"
 
 while True:
     try:
