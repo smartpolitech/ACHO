@@ -11,10 +11,10 @@ def parse(text):
 	#print "tagged", tagged
 	return tokens
 
-coms = {"persiana": {"subir":"acho/blind/up","bajar":"acho/blind/down","parar":"acho/blind/stop"},
-	"luces": {"encender":"acho/lights/on/all","apagar":"acho/lights/off/all"},
-	"television": {"encender":"acho/tv/power","apagar":"acho/tv/power"}
-	}
+#coms = {"persiana": {"subir":"acho/blind/up","bajar":"acho/blind/down","parar":"acho/blind/stop"},
+#	"luces": {"encender":"acho/lights/on/all","apagar":"acho/lights/off/all"},
+#	"television": {"encender":"acho/tv/power","apagar":"acho/tv/power"}
+#	}
 
 coms = {"subir": {"persiana":"acho/blind/up"},
 	"bajar": {"persiana":"acho/blind/down"},
