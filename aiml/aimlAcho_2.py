@@ -27,7 +27,7 @@ def on_connect(client, userdata, flags, rc):
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
-
+"""
     if(msg.topic=="acho/nlp"):
         print "topic nlp recibido"
         par = parse(msg.payload)
@@ -41,7 +41,7 @@ def on_message(client, userdata, msg):
                     if p2 in acs.keys():
                         print "accion",acs[p2]
                         client.publish(acs[p2],"")
-                
+"""                
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
