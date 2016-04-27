@@ -12,9 +12,16 @@ def parse(text):
 	return tokens
 
 coms = {"persiana": {"subir":"acho/blind/up","bajar":"acho/blind/down","parar":"acho/blind/stop"},
-		"luces": {"encender":"acho/lights/on/all","apagar":"acho/lights/off/all"},
-		"television": {"encender":"acho/tv/power","apagar":"acho/tv/power"}
-		}
+	"luces": {"encender":"acho/lights/on/all","apagar":"acho/lights/off/all"},
+	"television": {"encender":"acho/tv/power","apagar":"acho/tv/power"}
+	}
+
+coms = {"subir": {"persiana":"acho/blind/up"},
+	"bajar": {"persiana":"acho/blind/down"},
+	"parar": {"persiana":"acho/blind/stop"},
+	"encender": {"luz": {"uno":"acho/lights/on/1", "dos":"acho/lights/on/2"}, "luces":"acho/lights/on/all", "television":"acho/tv/power"},
+	"apagar":{"luz": {"uno":"acho/lights/off/1", "dos":"acho/lights/off/2"}, "luces":"acho/lights/off/all", "television":"acho/tv/power"}
+	}
 
 ##############
 ## MenQTT
