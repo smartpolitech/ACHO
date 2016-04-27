@@ -27,11 +27,12 @@ def on_connect(client, userdata, flags, rc):
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
-"""
+
     if(msg.topic=="acho/nlp"):
         print "topic nlp recibido"
         par = parse(msg.payload)
         print par
+"""        
         for p in par:
             print "p", p
             if p in coms.keys():
