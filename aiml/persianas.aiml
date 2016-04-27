@@ -4,7 +4,7 @@
 
   <aiml version="1.0"> 
 
-<!-- Free software Copyright © ALICE A.I. Foundation. --> 
+<!-- Free software Copyright Â© ALICE A.I. Foundation. --> 
 <!-- This program is open source code released under --> 
 <!-- the terms of the GNU General Public License --> 
 <!-- as published by the Free Software Foundation. --> 
@@ -15,25 +15,25 @@
 <!-- Revision Sara-0.02 --> 
 <!-- Last Modified March 15th, 2006 -->
 
-<!-- Software Libre Copyright © ALICE A.I. Foundation. --> 
-<!-- Este programa es de código abierto y publicado bajo --> 
-<!-- los términos de la licencia "GNU General Public License" --> 
+<!-- Software Libre Copyright Â© ALICE A.I. Foundation. --> 
+<!-- Este programa es de cÃ³digo abierto y publicado bajo --> 
+<!-- los tÃ©rminos de la licencia "GNU General Public License" --> 
 <!-- tal como establece la Free Software Foundation. --> 
-<!-- Cumple con la especificación de AIML 1.01 --> 
+<!-- Cumple con la especificaciÃ³n de AIML 1.01 --> 
 <!-- adoptada por la ALICE A.I. Foundation. --> 
-<!-- Sara.aiml: Temas de discusión general en AIML --> 
+<!-- Sara.aiml: Temas de discusiÃ³n general en AIML --> 
 <!-- Creado por Adam Codony aka XGargoyle, Octubre 24, 2005 --> 
-<!-- Versión ACHO-1.00 --> 
-<!-- Última Modificación Marzo 15, 2006 -->
+<!-- VersiÃ³n ACHO-1.00 --> 
+<!-- Ãšltima ModificaciÃ³n Marzo 15, 2006 -->
 
   
 	 <category> 
       <pattern>PERSIANA</pattern>
       <template> 
         <random> 
-          <li>¿Si?</li>
+          <li>Â¿Si?</li>
           <li>Dime.</li>
-          <li>¿Qué deseas?</li>
+          <li>Â¿QuÃ© deseas?</li>
         </random>
       </template>
     </category>
@@ -64,8 +64,8 @@
 	<pattern>SUBIR *</pattern>
       <template> 
         <random> 
-            <!--li>¿Cuánto deseas bajar?</li> -->
-            <li>Subiendo persiana</li>
+            <!--li>Â¿CuÃ¡nto deseas bajar?</li> -->
+            <li>acho/blind/up</li>
 	</random>
       </template>
     </category>
@@ -75,8 +75,8 @@
 	<pattern>BAJAR PERSIANA</pattern>
       <template> 
         <random> 
-            <!--li>¿Cuánto deseas bajar?</li> -->
-            <li>Bajando persiana</li>
+            <!--li>Â¿CuÃ¡nto deseas bajar?</li> -->
+            <li>acho/blind/down</li>
 	</random>
       </template>
     </category>
@@ -86,8 +86,8 @@
 	<pattern>PARAR *</pattern>
       <template> 
         <random> 
-            <!--li>¿Cuánto deseas bajar?</li> -->
-            <li>Parando persiana</li>
+            <!--li>Â¿CuÃ¡nto deseas bajar?</li> -->
+            <li>acho/blind/stop</li>
 	</random>
       </template>
     </category>
@@ -97,7 +97,7 @@
 	<pattern>BAJAR diez porciento</pattern>
       <template> 
         <random> 
-            <!--li>¿Cuánto deseas bajar?</li> -->
+            <!--li>Â¿CuÃ¡nto deseas bajar?</li> -->
             <li>Bajando 10 porciento</li>
 	</random>
       </template>
