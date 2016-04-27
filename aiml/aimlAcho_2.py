@@ -26,10 +26,9 @@ def on_connect(client, userdata, flags, rc):
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
     if(msg.topic=="acho/nlp"):
-        print "topic nlp recibido"
-        par = parse(msg.payload)
-        print par
-
+        print "topic nlp recibido", msg.payload
+        print kernel.respond(msg.payload)
+        
 
 client = mqtt.Client()
 client.on_connect = on_connect
@@ -51,7 +50,7 @@ kernel.respond("LOAD AIML B")
 # line and printing responses.
 #while True: 
 #	print kernel.respond(raw_input("HABLAME...> "))
-print kernel.respond(par)
+
 
 while True:
     try:

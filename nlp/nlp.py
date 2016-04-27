@@ -51,6 +51,8 @@ def on_message(client, userdata, msg):
 					if p2 in acs.keys():
 						print "accion",acs[p2]
 						client.publish(acs[p2],"")
+						break
+			break
 				
                 
 client = mqtt.Client()
