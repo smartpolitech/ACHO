@@ -17,10 +17,20 @@ def parse(text):
 #	}
 
 coms = {"subir": {"persiana":"acho/blind/up"},
-	"bajar": {"persiana":"acho/blind/down"},
-	"parar": {"persiana":"acho/blind/stop"},
-	"encender": {"luz": {"uno":"acho/lights/on/1", "dos":"acho/lights/on/2"}, "luces":"acho/lights/on/all", "television":"acho/tv/power"},
-	"apagar":{"luz": {"uno":"acho/lights/off/1", "dos":"acho/lights/off/2"}, "luces":"acho/lights/off/all", "television":"acho/tv/power"}
+		"bajar": {"persiana":"acho/blind/down"},
+		"parar": {"persiana":"acho/blind/stop"},
+		"encender": {
+					"luz": {
+						"uno":"acho/lights/on/1", 
+						"dos":"acho/lights/on/2"}, 
+					"luces":"acho/lights/on/all", 
+					"television":"acho/tv/power"},
+		"apagar":{  
+					"luz": {
+						"uno":"acho/lights/off/1", 
+						"dos":"acho/lights/off/2"}, 
+					"luces":"acho/lights/off/all", 
+					"television":"acho/tv/power"}
 	}
 
 ##############

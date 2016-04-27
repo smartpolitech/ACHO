@@ -71,12 +71,14 @@ def listener(messages):
 			else:
 				t["command"](t["params"])
 		elif m.content_type == 'voice':
+			print "voice message"
 			d = dateStringFromTimestamp(m.date)
 			file_path = 'audios/' + d + '_voice.ogg'
 			file_info = bot.get_file(m.voice.file_id)
 			url = 'https://api.telegram.org/file/bot{0}/{1}'.format(TOKEN, file_info.file_path)
 			req = urllib2.Request(url)
 			response = urllib2.urlopen(req)
+			print response
 			#TODO: check response
 			audioFile = response.read()
 			with open(file_path, 'w') as outfile:
@@ -84,6 +86,7 @@ def listener(messages):
 			file_path_out = file_path[:-4]+'.wav'
 			command = "ffmpeg -loglevel quiet -i "+os.getcwd()+"/"+file_path+" "+os.getcwd()+"/"+file_path_out
 			os.system(command)
+			print "publishing", os.getcwd()+"/"+file_path_out
 			client.publish('acho/asr/wavfile',os.getcwd()+"/"+file_path_out)
 			
 @bot.message_handler(commands=['start'])

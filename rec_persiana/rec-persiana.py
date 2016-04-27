@@ -6,7 +6,7 @@ def recorte(img):
 	height, width = img.shape
 	porx = 25
 	porx2 = 45 
-	pory = 48
+	pory = 46
 	x = (porx * width) / 100
 	x2 = (porx2 * width) / 100
 	y = (pory * height) / 100
@@ -71,6 +71,7 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
 	if msg.topic == "acho/blindstate/get":
 		porcent = proceso()
+		print "Porcentaje de cerrado (0-100%)" , porcent
 		client.publish("acho/blindstate/now", str(porcent))
 
 

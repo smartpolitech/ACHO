@@ -16,7 +16,7 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
 
     if(msg.topic=="acho/asr/wavfile"):
-        print "topic power recibido"
+        print "topic wavfile recibido", msg.payload
 	# obtain audio from the microphone
 	r = sr.Recognizer()
         print msg.payload
