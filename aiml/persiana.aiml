@@ -4,7 +4,7 @@
 
   <aiml version="1.0"> 
 
-<!-- Free software Copyright © ALICE A.I. Foundation. --> 
+<!-- Free software Copyright Â© ALICE A.I. Foundation. --> 
 <!-- This program is open source code released under --> 
 <!-- the terms of the GNU General Public License --> 
 <!-- as published by the Free Software Foundation. --> 
@@ -15,25 +15,25 @@
 <!-- Revision Sara-0.02 --> 
 <!-- Last Modified March 15th, 2006 -->
 
-<!-- Software Libre Copyright © ALICE A.I. Foundation. --> 
-<!-- Este programa es de código abierto y publicado bajo --> 
-<!-- los términos de la licencia "GNU General Public License" --> 
+<!-- Software Libre Copyright Â© ALICE A.I. Foundation. --> 
+<!-- Este programa es de cÃ³digo abierto y publicado bajo --> 
+<!-- los tÃ©rminos de la licencia "GNU General Public License" --> 
 <!-- tal como establece la Free Software Foundation. --> 
-<!-- Cumple con la especificación de AIML 1.01 --> 
+<!-- Cumple con la especificaciÃ³n de AIML 1.01 --> 
 <!-- adoptada por la ALICE A.I. Foundation. --> 
-<!-- Sara.aiml: Temas de discusión general en AIML --> 
+<!-- Sara.aiml: Temas de discusiÃ³n general en AIML --> 
 <!-- Creado por Adam Codony aka XGargoyle, Octubre 24, 2005 --> 
-<!-- Versión ACHO-1.00 --> 
-<!-- Última Modificación Marzo 15, 2006 -->
+<!-- VersiÃ³n ACHO-1.00 --> 
+<!-- Ãšltima ModificaciÃ³n Marzo 15, 2006 -->
 
   
 	 <category> 
       <pattern>PERSIANA</pattern>
       <template> 
         <random> 
-          <li>¿Si?</li>
+          <li>Â¿Si?</li>
           <li>Dime.</li>
-          <li>¿Qué deseas?</li>
+          <li>Â¿QuÃ© deseas?</li>
         </random>
       </template>
     </category>
@@ -63,18 +63,18 @@
     
      <category> 
       <pattern>SUBIR *</pattern>
-      <!--template>¿Cuánto quieres subir?</template> --->
+      <!--template>Â¿CuÃ¡nto quieres subir?</template> --->
       <template>
           <random>
-              <li>subir persiana</li>
+              <li>acho/blind/up</li>
           </random>
        </template>
       
     </category>
     
      <category> 
-      <pattern>* 10 porciento *</pattern>
-      <template>¿Cuánto quieres subir?</template>
+      <pattern>* DIEZ PORCIENTO</pattern>
+      <template>Â¿CuÃ¡nto quieres subir?</template>
     </category>
 
     
@@ -82,8 +82,8 @@
     <pattern>PARAR *</pattern>
       <template> 
         <random> 
-            <!--li>¿Cuánto deseas bajar?</li> --->
-            <li>Parar persiana</li>
+            <!--li>Â¿CuÃ¡nto deseas bajar?</li> --->
+            <li>acho/blind/stop</li>
 	</random>
       </template>
     </category>    
@@ -93,8 +93,8 @@
 	<pattern>BAJAR</pattern>
       <template> 
         <random> 
-            <!--li>¿Cuánto deseas bajar?</li> -->
-            <li>Bajar persiana</li>
+            <!--li>Â¿CuÃ¡nto deseas bajar?</li> -->
+            <li>acho/blind/down</li>
 	</random>
       </template>
     </category>
@@ -105,27 +105,27 @@
       <pattern>_ CONOCES A *</pattern>
       <template> 
         <random> 
-          <li>No, ¿quién es?</li>
-		  <li>¿Quién es <star index="2"/>?</li>
+          <li>No, Â¿quiÃ©n es?</li>
+		  <li>Â¿QuiÃ©n es <star index="2"/>?</li>
           <li>No lo conozco.</li>
         </random>
       </template>
    </category>
    
   <category> 
-      <pattern>DE DÓNDE ERES</pattern>
+      <pattern>DE DÃ“NDE ERES</pattern>
       <template> 
         <random> 
-          <li>Vivo en <bot name="ciudad"/>, ¿y tú?</li>
-          <li>De <bot name="ciudad"/>. ¿Y tú?</li>
-          <li>Soy de <bot name="ciudad"/>. ¿De dónde eres tú?</li>
-          <li><bot name="ciudadania"/>, ¿y tú?</li>
+          <li>Vivo en <bot name="ciudad"/>, Â¿y tÃº?</li>
+          <li>De <bot name="ciudad"/>. Â¿Y tÃº?</li>
+          <li>Soy de <bot name="ciudad"/>. Â¿De dÃ³nde eres tÃº?</li>
+          <li><bot name="ciudadania"/>, Â¿y tÃº?</li>
         </random>
       </template>
     </category>
     
     <category> 
-      <pattern>DÍA</pattern>
+      <pattern>DÃA</pattern>
       <template> 
         <random> 
           <li>Hoy es <date locale="es_ES" timezone="+1" format="%A"/> <date locale="es_ES" timezone="+1" format="%d"/>.</li>
@@ -140,11 +140,11 @@
       <pattern>EDAD</pattern>
       <template> 
         <random> 
-          <li>Tengo <bot name="edad"/> años, ¿y tú?</li>
+          <li>Tengo <bot name="edad"/> aÃ±os, Â¿y tÃº?</li>
           <li><bot name="edad"/>.</li>
-          <li><bot name="edad"/>, ¿y tú?</li>
+          <li><bot name="edad"/>, Â¿y tÃº?</li>
           <li>Soy del <bot name="anyo_nacimiento"/>, o sea que tengo <bot name="edad"/></li>
-          <li>Nací en el <bot name="anyo_nacimiento"/>, por lo que tengo <bot name="edad"/> años.</li>
+          <li>NacÃ­ en el <bot name="anyo_nacimiento"/>, por lo que tengo <bot name="edad"/> aÃ±os.</li>
         </random>
       </template>
     </category>
