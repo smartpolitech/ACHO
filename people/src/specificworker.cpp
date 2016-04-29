@@ -47,24 +47,36 @@ void SpecificWorker::compute()
     //rgbd_proxy->getImage(image, depth, points, hState, bState);
     rgbd_proxy->getDepth(depth, hState, bState);
 	   
-    cv::Mat depthCV(240, 320, CV_32FC1,  &(depth)[0]), depth_norm, depth_norm_scaled;
-	
-	cv::threshold( depthCV, depthCV, 1500, 0, 4);
-	
-    cv::normalize( depthCV, depth_norm, 0, 255, cv::NORM_MINMAX, CV_32FC1, cv::Mat() );
-    cv::convertScaleAbs( depth_norm, depth_norm_scaled );  
-    cv::imshow("depth", depth_norm_scaled);
-    
-	//double min, max;
-	//cv::minMaxLoc(depthCV,&min,&max);
-	
-    //writeVideo("", depthCV);
-    
-//     if(reloj.elapsed() > 5000)
-//     {
-//       writeVideo("close");
-//       qFatal("fary");
-//     }
+    cv::Mat depthCV(240, 320, CV_32FC1,  &(depth)[0]), depth_norm;
+		//cv::threshold( depthCV, depthCV, 1300, 0, 4);
+		//int npixels = cv::countNonZero(depthCV);
+		//qDebug() << npixels;
+		//if( npixels > 100)
+		
+			std::vector< cv::Point2f> points;
+			int k=0;
+			for(int i=0; i<depthCV.rows; i++)
+				for(int j=0; j<depthCV.cols; j++) 
+					if ( depthCV.at<float>(i,j) < 1300 )
+					{
+						points.push_back(cv::Point2f(i,j));
+						k++;
+					}
+					else
+						depthCV.at<float>(i,j) = 0.f;
+		
+			qDebug() << k << "points";
+			if( k > 100)
+			{
+				cv::Mat indices, centers;
+				cv::TermCriteria criteria(cv::TermCriteria::EPS + cv::TermCriteria::COUNT, 10, 1.0);
+				double c = cv::kmeans(points, 3, indices, criteria, 3, cv::KMEANS_RANDOM_CENTERS, centers );
+				//qDebug() << centers.at<float>(0,0) << centers.at<float>(0,1);
+			}
+			
+		cv::normalize( depthCV, depth_norm, 0, 255, cv::NORM_MINMAX, CV_32FC1, cv::Mat() );
+    cv::convertScaleAbs( depth_norm, depth_norm );  
+    cv::imshow("depth", depth_norm); 		
     
   }
   catch(const Ice::Exception &e)

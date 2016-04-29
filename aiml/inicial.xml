@@ -1,0 +1,18 @@
+<aiml version="1.0">
+
+<!-- This category works with the Standard AIML Set -->
+<category>
+<pattern>LOAD AIML B</pattern>
+<template>
+
+<!-- Load standard AIML set -->
+<!--learn>aiml-set/sara.aiml</learn-->
+
+<learn>persianas.aiml</learn>    
+<learn>luces.aiml</learn>
+<learn>tv.aiml</learn>
+
+</template>
+</category>
+
+</aiml>
