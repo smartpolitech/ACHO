@@ -66,18 +66,30 @@ void SpecificWorker::compute()
 						depthCV.at<float>(i,j) = 0.f;
 		
 			qDebug() << k << "points";
-			if( k > 100)
+			int maxClusters = 5;
+			cv::Mat indices, centers;
+			cv::TermCriteria criteria(cv::TermCriteria::EPS + cv::TermCriteria::COUNT, 10, 1.0);
+			double c = cv::kmeans(cv::Mat(points).reshape(1, points.size()), 
+															maxClusters, indices, criteria, maxClusters, cv::KMEANS_RANDOM_CENTERS, centers );
+			qDebug() << centers.at<float>(0,0) << centers.at<float>(0,1);
+		
+			std::vector<uint32_t> count;
+			for (int i=0; i<maxClusters; i++)
+				count.push_back(0);
+			for (int i=0; i<indices.rows; i++)
+				count[indices.at<int>(i)] ++;
+		
+			cv::normalize( depthCV, depth_norm, 0, 255, cv::NORM_MINMAX, CV_32FC1, cv::Mat() );
+			cv::convertScaleAbs( depth_norm, depth_norm );
+			printf("%d %d\n", indices.rows, indices.cols);
+		
+			for (int row=0; row<centers.rows; row++)
 			{
-				cv::Mat indices, centers;
-				cv::TermCriteria criteria(cv::TermCriteria::EPS + cv::TermCriteria::COUNT, 10, 1.0);
-				double c = cv::kmeans(points, 3, indices, criteria, 3, cv::KMEANS_RANDOM_CENTERS, centers );
-				//qDebug() << centers.at<float>(0,0) << centers.at<float>(0,1);
+				printf("%d: %d\n", row, count[row]);
+				if (count[row] > 800)
+					cv::circle(depth_norm, cv::Point(centers.at<float>(row,1), centers.at<float>(row,0)), 40, cv::Scalar(255) );
 			}
-			
-		cv::normalize( depthCV, depth_norm, 0, 255, cv::NORM_MINMAX, CV_32FC1, cv::Mat() );
-    cv::convertScaleAbs( depth_norm, depth_norm );  
-    cv::imshow("depth", depth_norm); 		
-    
+			cv::imshow("depth", depth_norm); 		
   }
   catch(const Ice::Exception &e)
   {
