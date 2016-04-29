@@ -47,49 +47,50 @@ void SpecificWorker::compute()
     //rgbd_proxy->getImage(image, depth, points, hState, bState);
     rgbd_proxy->getDepth(depth, hState, bState);
 	   
-    cv::Mat depthCV(240, 320, CV_32FC1,  &(depth)[0]), depth_norm;
-		//cv::threshold( depthCV, depthCV, 1300, 0, 4);
-		//int npixels = cv::countNonZero(depthCV);
-		//qDebug() << npixels;
-		//if( npixels > 100)
+    cv::Mat depthCV(240, 320, CV_32FC1,  &(depth)[0]), depth_norm, dd;
 		
-			std::vector< cv::Point2f> points;
-			int k=0;
-			for(int i=0; i<depthCV.rows; i++)
-				for(int j=0; j<depthCV.cols; j++) 
-					if ( depthCV.at<float>(i,j) < 1300 )
-					{
-						points.push_back(cv::Point2f(i,j));
-						k++;
-					}
-					else
-						depthCV.at<float>(i,j) = 0.f;
+		std::vector< cv::Point2f> points;
+		for(int i=0; i<depthCV.rows; i++)
+			for(int j=0; j<depthCV.cols; j++) 
+				if ( depthCV.at<float>(i,j) < 1400 and  depthCV.at<float>(i,j) > 1000)
+				{
+					points.push_back(cv::Point2f(i,j));
+				}
+				else
+					depthCV.at<float>(i,j) = 0.f;
+
+		cv::imshow("depthCV", depthCV);
+		qDebug() << "points" << points.size();
 		
-			qDebug() << k << "points";
-			int maxClusters = 5;
-			cv::Mat indices, centers;
-			cv::TermCriteria criteria(cv::TermCriteria::EPS + cv::TermCriteria::COUNT, 10, 1.0);
-			double c = cv::kmeans(cv::Mat(points).reshape(1, points.size()), 
-															maxClusters, indices, criteria, maxClusters, cv::KMEANS_RANDOM_CENTERS, centers );
-			qDebug() << centers.at<float>(0,0) << centers.at<float>(0,1);
+		if( points.size() < 100)
+		  return;
 		
-			std::vector<uint32_t> count;
-			for (int i=0; i<maxClusters; i++)
-				count.push_back(0);
-			for (int i=0; i<indices.rows; i++)
-				count[indices.at<int>(i)] ++;
+		int maxClusters = 3;
+		cv::Mat indices, centers;
+		cv::TermCriteria criteria(cv::TermCriteria::EPS + cv::TermCriteria::COUNT, 10, 1.0);
 		
-			cv::normalize( depthCV, depth_norm, 0, 255, cv::NORM_MINMAX, CV_32FC1, cv::Mat() );
-			cv::convertScaleAbs( depth_norm, depth_norm );
-			printf("%d %d\n", indices.rows, indices.cols);
-		
-			for (int row=0; row<centers.rows; row++)
-			{
-				printf("%d: %d\n", row, count[row]);
-				if (count[row] > 800)
-					cv::circle(depth_norm, cv::Point(centers.at<float>(row,1), centers.at<float>(row,0)), 40, cv::Scalar(255) );
-			}
-			cv::imshow("depth", depth_norm); 		
+		double c = cv::kmeans(cv::Mat(points).reshape(1, points.size()), maxClusters, indices, criteria, maxClusters, cv::KMEANS_PP_CENTERS, centers );
+		qDebug() << "Num centros" << centers.rows;
+	
+		std::vector<uint32_t> count;
+		for (int i=0; i<maxClusters; i++)
+			count.push_back(0);
+	
+		for (int i=0; i<indices.rows; i++)
+			count[indices.at<int>(i)]++;
+	
+		cv::normalize( depthCV, depth_norm, 0, 255, cv::NORM_MINMAX, CV_32FC1, cv::Mat() );
+		cv::convertScaleAbs( depth_norm, depth_norm );
+		printf("%d %d\n", indices.rows, indices.cols);
+	
+		for (int row=0; row<centers.rows; row++)
+		{
+			printf("%d: %d\n", row, count[row]);
+			if (count[row] > 200)
+				cv::circle(depth_norm, cv::Point(centers.at<float>(row,1), centers.at<float>(row,0)), 40, cv::Scalar(255) );
+		}
+		cv::imshow("depth", depth_norm); 	
+		  
   }
   catch(const Ice::Exception &e)
   {
