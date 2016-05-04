@@ -38,6 +38,8 @@ def on_connect(client, userdata, flags, rc):
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
 
+    action=False
+
     if(msg.topic=="acho/nlp"):
         print "topic nlp recibido"
         par = parse(msg.payload)
@@ -49,8 +51,9 @@ def on_message(client, userdata, msg):
 				acs = coms[p]
 			elif p in acs.keys():	
 				acs = acs[p]
+				action=True
 		
-	if acs is not "":
+	if action:
 		print "publicar topico", acs
 		client.publish(acs, "")
                 
