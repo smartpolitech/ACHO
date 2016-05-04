@@ -70,7 +70,6 @@
       </template>
     </category>
     
-    
     	<category>
 	<pattern>BAJAR PERSIANA</pattern>
       <template> 
@@ -81,6 +80,15 @@
       </template>
     </category>
     
+    <category>
+	<pattern>BAJAR LA PERSIANA</pattern>
+      <template> 
+        <random> 
+            <!--li>¿Cuánto deseas bajar?</li> -->
+            <li>acho/blind/down</li>
+	</random>
+      </template>
+    </category>
     
     	<category>
 	<pattern>PARAR *</pattern>
