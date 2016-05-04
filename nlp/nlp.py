@@ -17,20 +17,10 @@ def parse(text):
 #	}
 
 coms = {"subir": {"persiana":"acho/blind/up"},
-		"bajar": {"persiana":"acho/blind/down"},
-		"parar": {"persiana":"acho/blind/stop"},
-		"encender": {
-					"luz": {
-						"uno":"acho/lights/on/1", 
-						"dos":"acho/lights/on/2"}, 
-					"luces":"acho/lights/on/all", 
-					"television":"acho/tv/power"},
-		"apagar":{  
-					"luz": {
-						"uno":"acho/lights/off/1", 
-						"dos":"acho/lights/off/2"}, 
-					"luces":"acho/lights/off/all", 
-					"television":"acho/tv/power"}
+	"bajar": {"persiana":"acho/blind/down"},
+	"parar": {"persiana":"acho/blind/stop"},
+	"encender": {"luz": {"uno":"acho/lights/on/1", "dos":"acho/lights/on/2"}, "luces":"acho/lights/on/all", "television":"acho/tv/power"},
+	"apagar":{"luz": {"uno":"acho/lights/off/1", "dos":"acho/lights/off/2"}, "luces":"acho/lights/off/all", "television":"acho/tv/power"}
 	}
 
 ##############
@@ -51,19 +41,17 @@ def on_message(client, userdata, msg):
     if(msg.topic=="acho/nlp"):
         print "topic nlp recibido"
         par = parse(msg.payload)
-        print par
-        for p in par:
-			print "p", p
+	acs={}     
+
+	for p in par:
+		if p in coms or p in acs:
 			if p in coms.keys():
 				acs = coms[p]
-				print "acs", acs
-				for p2 in par:
-					if p2 in acs.keys():
-						print "accion",acs[p2]
-						client.publish(acs[p2],"")
-						break
-			break
-				
+			elif p in acs.keys():	
+				acs = acs[p]
+		
+	if acs is not "":
+		print "publicar topico", acs	
                 
 client = mqtt.Client()
 client.on_connect = on_connect
