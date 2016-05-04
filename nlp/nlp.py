@@ -51,7 +51,8 @@ def on_message(client, userdata, msg):
 				acs = acs[p]
 		
 	if acs is not "":
-		print "publicar topico", acs	
+		print "publicar topico", acs
+		client.publish(acs, "")
                 
 client = mqtt.Client()
 client.on_connect = on_connect
