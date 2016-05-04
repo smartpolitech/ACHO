@@ -68,6 +68,37 @@
        </template>
     </category>
     
+    <category>
+      <pattern>ENCIENDE LA LUZ</pattern>
+       <template> 
+         <random> 
+            <!--li>¿Cuánto deseas bajar?</li> -->
+            <li>acho/lights/on/all</li>
+	 </random>
+       </template>
+    </category>
+    
+     <category>
+      <pattern>ENCIENDE LAS LUCES</pattern>
+       <template> 
+         <random> 
+            <!--li>¿Cuánto deseas bajar?</li> -->
+            <li>acho/lights/on/all</li>
+	 </random>
+       </template>
+    </category>
+    
+    <category>
+      <pattern>PRENDER LAS LUCES</pattern>
+       <template> 
+         <random> 
+            <!--li>¿Cuánto deseas bajar?</li> -->
+            <li>acho/lights/on/all</li>
+	 </random>
+       </template>
+    </category>
+    
+    
      <category>
       <pattern>PREDER LUCES</pattern>
        <template> 
@@ -98,7 +129,7 @@
       </template>
     </category>
     
-    	<category>
+    <category>
 	<pattern>APAGAR LUCES</pattern>
       <template> 
         <random> 
@@ -108,6 +139,25 @@
       </template>
     </category>
     
+    <category>
+	<pattern>APAGAR LAS LUCES</pattern>
+      <template> 
+        <random> 
+            <!--li>¿Cuánto deseas bajar?</li> -->
+            <li>acho/lights/off/all</li>
+	</random>
+      </template>
+    </category>
+    
+    <category>
+	<pattern>APAGAR LA LUZ</pattern>
+      <template> 
+        <random> 
+            <!--li>¿Cuánto deseas bajar?</li> -->
+            <li>acho/lights/off/all</li>
+	</random>
+      </template>
+    </category>
     
     	<category>
 	<pattern>AUMENTAR INTENSIDAD</pattern>
