@@ -7,6 +7,67 @@ import os, thread, time, datetime, ephem
 from subprocess import call
 
 ARDUINO = "192.168.0.101"
+tiempo = 0;
+posicion_persiana = 0
+isSubiendo = False;
+
+def moduloInferior(num, divisor):
+    return num - (num%divisor)
+
+def moduloSuperior(num, divisor):
+    return (num+5) - (num%divisor)
+
+def calculaTiempoSeccion():
+    global posicion_persiana
+    global isSubiendo
+    if isSubiendo:
+        return moduloSuperior(posicion_persiana,5)-posicion_persiana
+    return posicion_persiana - moduloInferior(posicion_persiana,5)
+		
+def initTiempo(estadoSubiendo):
+    global isSubiendo
+    global tiempo
+    global posicion_persiana
+    isSubiendo = estadoSubiendo
+    tiempo = time.time()
+
+def finTiempo():
+    global isSubiendo
+    global tiempo
+    global posicion_persiana
+    if isSubiendo:
+	    posicion_persiana+=time.time()-tiempo
+    else:
+	    posicion_persiana-=time.time()-tiempo
+    #Comprobaciones finales
+    if posicion_persiana > 25:
+        posicion_persiana = 25
+    if posicion_persiana < 0:
+        posicion_persiana = 0
+
+def parar_persiana():
+    client.publish('acho/tts', 'Parando persiana')
+    call(["curl", "http://root:opticalflow@" +ARDUINO + "/arduino/command/blindstop"])
+
+def bajar_persiana_por_seccion(secc):
+    global posicion_persiana
+    initTiempo(False)
+    call(["curl", "http://root:opticalflow@" + ARDUINO + "/arduino/command/blinddown"])
+    print("Bajando persiana a tramos.")
+    time.sleep(calculaTiempoSeccion())
+    #Restamos al tiempo acumulado de la persiana el tiempo dedicado para la bajada ejecutada 
+    finTiempo()
+    parar_persiana()
+	
+def subir_persiana_por_seccion(secc):
+    global posicion_persiana
+    initTiempo(True)
+    call(["curl", "http://root:opticalflow@" + ARDUINO + "/arduino/command/blindup"])
+    print("Subiendo persiana a tramos.")
+    time.sleep(calculaTiempoSeccion())
+    #Sumamos al tiempo acumulado de la persiana el tiempo dedicado para la subida ejecutada 
+    finTiempo()
+    parar_persiana()
 
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
@@ -22,16 +83,27 @@ def on_message(client, userdata, msg):
     print msg.topic
 
     if(msg.topic=="acho/blind/up"):
-        call(["curl", "http://root:opticalflow@" + ARDUINO + "/arduino/command/blindup"])    
-	client.publish('acho/tts', 'Subiendo persiana')
+        client.publish('acho/tts', 'Subiendo persiana')
+        call(["curl", "http://root:opticalflow@" + ARDUINO + "/arduino/command/blindup"])
+        initTiempo(True)		
 
     if(msg.topic=="acho/blind/down"):
-        call(["curl", "http://root:opticalflow@" + ARDUINO + "/arduino/command/blinddown"])    
-	client.publish('acho/tts', 'Bajando persiana')
+        client.publish('acho/tts', 'Bajando persiana')
+        call(["curl", "http://root:opticalflow@" + ARDUINO + "/arduino/command/blinddown"]) 
+        initTiempo(False)		
 
     if(msg.topic=="acho/blind/stop"):
+        client.publish('acho/tts', 'Parando persiana')
+        finTiempo()
         call(["curl", "http://root:opticalflow@" +ARDUINO + "/arduino/command/blindstop"])    
-	client.publish('acho/tts', 'Parando persiana')
+	
+    if(msg.topic=="acho/blind/up/few"):
+        client.publish('acho/tts', 'Subiendo un poco la persiana')
+        subir_persiana_por_seccion(1)
+	
+    if(msg.topic == "acho/blind/down/few"):
+        client.publish('acho/tts', 'Bajando un poco la persiana')
+        bajar_persiana_por_seccion(1)
 
 
 def blindController():

@@ -7,6 +7,7 @@ def recorte(img):
 	porx = 25
 	porx2 = 45 
 	pory = 46
+	
 	x = (porx * width) / 100
 	x2 = (porx2 * width) / 100
 	y = (pory * height) / 100
@@ -34,8 +35,8 @@ def estirar(modificada, anchura, altura):
 def calcula(imagen, altura):
     num = 0
     while imagen[altura-1-num][40] > 0 and num < altura:		
-	num += 1		
-    return (100-(int (round(num*100/altura, 0))))
+		num += 1		
+    return (100-(int (round(num*100/float(altura), 0))))
 
 def proceso():
 	cap = cv2.VideoCapture("http://salareuniones-robolab.duckdns.org:8080/?action=stream")

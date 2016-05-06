@@ -16,11 +16,13 @@ def parse(text):
 #	"television": {"encender":"acho/tv/power","apagar":"acho/tv/power"}
 #	}
 
-coms = {"subir": {"persiana":"acho/blind/up"},
-	"bajar": {"persiana":"acho/blind/down"},
-	"parar": {"persiana":"acho/blind/stop"},
-	"encender": {"luz": {"uno":"acho/lights/on/1", "dos":"acho/lights/on/2"}, "luces":"acho/lights/on/all", "television":"acho/tv/power"},
-	"apagar":{"luz": {"uno":"acho/lights/off/1", "dos":"acho/lights/off/2"}, "luces":"acho/lights/off/all", "television":"acho/tv/power"}
+coms = {"subir": 			{"persiana":"acho/blind/up"},
+		"bajar": 			{"persiana":"acho/blind/down"},
+		"parar": 			{"persiana":"acho/blind/stop"},
+		"encender": 		{"luz": {"uno":"acho/lights/on/1", "dos":"acho/lights/on/2"}, "luces":"acho/lights/on/all", "television":"acho/tv/power"},
+		"apagar":			{"luz": {"uno":"acho/lights/off/1", "dos":"acho/lights/off/2"}, "luces":"acho/lights/off/all", "television":"acho/tv/power"},
+		"subir seccion": 	{"persiana": "acho/blind/up/few"},
+		"bajar seccion": 	{"persiana": "acho/blind/down/few"},
 	}
 
 ##############
@@ -37,12 +39,11 @@ def on_connect(client, userdata, flags, rc):
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
-
-    action=False
-
-    if(msg.topic=="acho/nlp"):
-        print "topic nlp recibido"
-        par = parse(msg.payload)
+	action=False
+	print "hola"
+	if(msg.topic=="acho/nlp"):
+		print "topic nlp recibido"
+		par = parse(msg.payload)
 	acs={}     
 
 	for p in par:

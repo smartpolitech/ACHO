@@ -5,6 +5,7 @@ import time, sys  # Librería para hacer que el programa que controla el bot no 
 import paho.mqtt.client as mqtt
 #import requests
 import urllib2
+import urllib
 import os
 
 client = mqtt.Client()
@@ -17,7 +18,8 @@ bot = telebot.TeleBot(TOKEN)
 
 def funpersiana(cid):
     markup = types.ReplyKeyboardMarkup(one_time_keyboard=False)
-    markup.row('subir', 'parar', 'bajar')
+    markup.row('subir','parar', 'bajar')
+    markup.row('subir seccion','bajar seccion')
     markup.row('retroceder')
     bot.send_message(cid, "Elija la opcion que desea, o retroceder para volver atras", None, None, markup)
 
@@ -40,21 +42,23 @@ def retroceder(cid):
     markup.row('bombilla')
     markup.row('television')
     bot.send_message(cid, "Elija la opcion que desea", None, None, markup)
-    
+
 def publish(topic):
-	client.reconnect()    
+	client.reconnect()
 	client.publish(topic, "")
-	
+
 topics = {"persiana":  { "command": funpersiana, "params": "cid", "text": "" },
 		  "bombilla":  { "command": funbombilla, "params": "cid",  "text": "" },
   		  "television":{ "command": funtelevision, "params": "cid", "text" : "" },
   		  "retroceder":{ "command": retroceder, "params": "cid", "text" : "" },
-		  "subir": 	   { "command": publish, "params": "acho/blind/up", "text" : "" },
-		  "bajar": 	   { "command": publish, "params": "acho/blind/down", "text" : "" },
-  		  "parar": 	   { "command": publish, "params": "acho/blind/stop", "text" : "" },
-		  "power": 	   { "command": publish, "params": "acho/tv/power", "text" : "" },
-		  "encender":  { "command": publish, "params": "acho/lights/on/all", "text" : "" },
-		  "apagar":    { "command": publish, "params": "acho/lights/off/all", "text" : "" }
+		  "subir seccion": { "command": publish, "params": "subir seccion persiana","text":"" },
+		  "subir": 	   { "command": publish, "params": "subir persiana", "text" : "" },
+		  "bajar seccion":{"command":publish, "params":"bajar seccion persiana","text":"" },
+		  "bajar": 	   { "command": publish, "params": "bajar persiana", "text" : "" },
+  		  "parar": 	   { "command": publish, "params": "parar persiana", "text" : "" },
+		  "power": 	   { "command": publish, "params": "encender television", "text" : "" },
+		  "encender":  { "command": publish, "params": "encender luces", "text" : "" },
+		  "apagar":    { "command": publish, "params": "apagar luces", "text" : "" }
 		  }
 
 def dateStringFromTimestamp(t):
@@ -69,7 +73,10 @@ def listener(messages):
 			if t["params"] == "cid":
 				t["command"](cid)
 			else:
-				t["command"](t["params"])
+				#t["command"](t["params"])
+				client.publish("acho/nlp", t["params"])
+				print "sending to nlp", t["params"]
+				
 		elif m.content_type == 'voice':
 			print "voice message"
 			d = dateStringFromTimestamp(m.date)
@@ -77,6 +84,9 @@ def listener(messages):
 			file_info = bot.get_file(m.voice.file_id)
 			url = 'https://api.telegram.org/file/bot{0}/{1}'.format(TOKEN, file_info.file_path)
 			req = urllib2.Request(url)
+			
+			#da error al crear la url!!!!
+			
 			response = urllib2.urlopen(req)
 			print response
 			#TODO: check response
@@ -89,6 +99,9 @@ def listener(messages):
 			print "publishing", os.getcwd()+"/"+file_path_out
 			client.publish('acho/asr/wavfile',os.getcwd()+"/"+file_path_out)
 			
+	
+			
+
 @bot.message_handler(commands=['start'])
 def command_start(m):
     cid = m.chat.id
@@ -105,4 +118,4 @@ while True:
 	except:
 		print "Unexpected error:", sys.exc_info()[0]
     	time.sleep(10)
-	
+
