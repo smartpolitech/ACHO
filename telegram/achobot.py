@@ -74,6 +74,7 @@ def listener(messages):
 				t["command"](cid)
 			else:
 				#t["command"](t["params"])
+				client.reconnect()
 				client.publish("acho/nlp", t["params"])
 				print "sending to nlp", t["params"]
 				
@@ -97,6 +98,7 @@ def listener(messages):
 			command = "ffmpeg -loglevel quiet -i "+os.getcwd()+"/"+file_path+" "+os.getcwd()+"/"+file_path_out
 			os.system(command)
 			print "publishing", os.getcwd()+"/"+file_path_out
+			client.reconnect()
 			client.publish('acho/asr/wavfile',os.getcwd()+"/"+file_path_out)
 			
 	
@@ -114,7 +116,7 @@ bot.set_update_listener(listener)
 
 while True:
 	try:
-		bot.polling(none_stop=False)
+		bot.polling(none_stop=True)
 	except:
 		print "Unexpected error:", sys.exc_info()[0]
     	time.sleep(10)

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+    <link type="text/css" rel="stylesheet" href="index.css">
+	<script src="/mqtt.js"></script>
+</head>
+<body>
+	
+<img id = "img-head" src="portada_600x_2013-12-10.png" alt="">
+
+<ul id = "lista-obj"> 
+    <li>	
+        <ul>
+        	<li>Persiana</li>
+        	<li><input id = "subir-persiana" onclick="subirPersiana()" type="submit" value="Subir"></li>
+        	<li><input id = "subir-persiana" onclick="bajarPersiana()" type="submit" value="Bajar"></li>
+        </ul>	
+
+    </li>
+
+
+    <li>
+    	<ul>
+        	<li>Televisión</li>
+        	<li><button id = "powerON-tv" onclick="encenderTv()" type="button">encender</button></li>        
+        </ul>
+
+    </li>
+
+
+    <li>	
+        <ul>
+        	<li>Luces</li>
+        	<li><input id = "powerON-luz" onclick="onLuces()" type="submit" value="Encender"></li>
+        	<li><input id = "powerOFF-luz" onclick="offLuces()" type="submit" value="Apagar"></li>
+        </ul>	
+
+    </li>
+</ul>
+
+
+
+<script>
+function encenderTv() {
+    
+
+}
+
+function subirPersiana() {
+     var client = mqtt.connect();
+     client.subscribe("mqtt/acho");
+     client.publish("acho/blind/up","");    
+}
+
+function bajarPersiana() {
+     var client = mqtt.connect();
+     client.subscribe("mqtt/acho");
+     client.publish("acho/blind/down","");
+}
+
+function onLuces() {
+     var client = mqtt.connect();
+     client.subscribe("mqtt/acho");
+     client.publish("acho/lights/on/all","");
+}
+
+function offLuces() {
+     var client = mqtt.connect();
+     client.subscribe("mqtt/acho");
+     client.publish("acho/lights/off/all","");
+}
+
+</script>
+
+</body>
+</html>
