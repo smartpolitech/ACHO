@@ -21,15 +21,15 @@ while(True):
 
     #   resize image size
     (h, w) = image.shape[:2]
-    width = min(400, image.shape[1])
+    width = min(200, image.shape[1])
     r = width / float(w)
     dim = (width, int(h * r))
     image = cv2.resize(image, dim, interpolation=cv2.INTER_AREA)
     
-    orig = image.copy()
+    #orig = image.copy()
 
     # detect people in the image
-    (rects, weights) = hog.detectMultiScale(image, winStride=(4, 4),padding=(8, 8), scale=1.05, useMeanshiftGrouping=True)
+    (rects, weights) = hog.detectMultiScale(image, winStride=(2, 2),padding=(8, 8), scale=1.05, useMeanshiftGrouping=True)
     
     rects = np.array([[x, y, x + w, y + h] for (x, y, w, h) in rects])
     pick = non_max_suppression(rects, probs=None, overlapThresh=0.55)

@@ -1,5 +1,5 @@
 import paho.mqtt.client as mqtt
-import pygame, sys, time
+import pygame, sys, os, time
 import random
 from pygame.locals import *
 from time import *
@@ -20,7 +20,8 @@ def show():
 	pygame.display.set_caption("avatar")
 
 	windowSurface.fill(BACKGROUND)
-	img=pygame.image.load('animate/face_normal_random.png')
+	currentPath = os.path.abspath(os.path.dirname(sys.argv[0]))
+	img=pygame.image.load(currentPath+'/animate/face_normal_random.png')
 	windowSurface.blit(img,(0,0))
 	pygame.display.update()
 	return
@@ -64,8 +65,9 @@ def on_message(client, userdata, msg):
 
 	windowSurface = pygame.display.set_mode((259, 271), 0, 32)
 	paragraph = str(msg.payload) 
-	paragraph = re.sub('[!,;?]', '.', paragraph)
-	lastImage = pygame.image.load('animate/face_normal.png')
+	paragraph = re.sub('[!,;?]', '.', paragraph)	
+	currentPath = os.path.abspath(os.path.dirname(sys.argv[0]))
+	lastImage = pygame.image.load(currentPath + '/animate/face_normal.png')
 
 	for sentence in paragraph.split("."):
 
