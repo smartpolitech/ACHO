@@ -2,14 +2,21 @@
 # PERSIANA
 #
 
+#from skyfield.api import load 
+from astral import Astral 
 import paho.mqtt.client as mqtt
-import os, thread, time, datetime, ephem
+import os, _thread, time
+from datetime import datetime, timedelta
+from pytz import timezone
+import pytz
 from subprocess import call
 
 ARDUINO = "192.168.0.101"
-tiempo = 0;
+tiempo = 0
 posicion_persiana = 0
-isSubiendo = False;
+isSubiendo = False
+esDeDia = False
+esDeNoche = False
 
 def moduloInferior(num, divisor):
     return num - (num%divisor)
@@ -18,7 +25,7 @@ def moduloSuperior(num, divisor):
     return (num+5) - (num%divisor)
 
 def calculaTiempoSeccion():
-    global posicion_persiana
+    global posicion_persiana 
     global isSubiendo
     if isSubiendo:
         return moduloSuperior(posicion_persiana,5)-posicion_persiana
@@ -46,7 +53,7 @@ def finTiempo():
         posicion_persiana = 0
 
 def parar_persiana():
-    client.publish('acho/tts', 'Parando persiana')
+    client.publish('acho/tts', '        Parando persiana')
     call(["curl", "http://root:opticalflow@" +ARDUINO + "/arduino/command/blindstop"])
 
 def bajar_persiana_por_seccion(secc):
@@ -80,63 +87,79 @@ def on_connect(client, userdata, flags, rc):
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
 
-    print msg.topic
+    print (msg.topic)
 
-    if(msg.topic=="acho/blind/up"):
-        client.publish('acho/tts', 'Subiendo persiana')
+    if(msg.topic == "acho/blind/up"):
+        client.publish('acho/tts', '        Subiendo persiana')
         call(["curl", "http://root:opticalflow@" + ARDUINO + "/arduino/command/blindup"])
         initTiempo(True)		
 
-    if(msg.topic=="acho/blind/down"):
-        client.publish('acho/tts', 'Bajando persiana')
+    if(msg.topic == "acho/blind/down"):
+        client.publish('acho/tts', '        Bajando persiana')
         call(["curl", "http://root:opticalflow@" + ARDUINO + "/arduino/command/blinddown"]) 
         initTiempo(False)		
 
-    if(msg.topic=="acho/blind/stop"):
-        client.publish('acho/tts', 'Parando persiana')
+    if(msg.topic == "acho/blind/stop"):
+        client.publish('acho/tts', '        Parando persiana')
         finTiempo()
         call(["curl", "http://root:opticalflow@" +ARDUINO + "/arduino/command/blindstop"])    
 	
-    if(msg.topic=="acho/blind/up/few"):
-        client.publish('acho/tts', 'Subiendo un poco la persiana')
+    if(msg.topic == "acho/blind/up/few"):
+        client.publish('acho/tts', '        Subiendo un poco la persiana')
         subir_persiana_por_seccion(1)
 	
     if(msg.topic == "acho/blind/down/few"):
-        client.publish('acho/tts', 'Bajando un poco la persiana')
+        client.publish('acho/tts', '        Bajando un poco la persiana')
         bajar_persiana_por_seccion(1)
 
 
 def blindController():
-    print "Entering lind controller"
+    global esDeDia
+    global esDeNoche
+    print ("\nEntering lind controller")
+    
+    
     while True:
-	print "Checking sunset at ", str(datetime.datetime.now())
-        o=ephem.Observer()  
-        o.lat='39.4'  
-        o.long='-6.3'  
-        s=ephem.Sun()  
-        s.compute()  
-        print ephem.localtime(o.next_rising(s)) , ephem.localtime(o.next_setting(s))
-        chapar = datetime.datetime.now().replace(hour=21, minute = 30)
-        if datetime.datetime.today() > ephem.localtime(o.next_setting(s)) or datetime.datetime.today() > chapar:
-            print "Good night. lowering blids"
-            call(["curl", "http://root:opticalflow@" + ARDUINO + "/arduino/command/blinddown"])    
-        if datetime.datetime.today().weekday() >= 0 and datetime.datetime.today().weekday() < 5 and datetime.datetime.today() > ephem.localtime(o.next_rising(s)):
-            print "Good morning. raising blinds"
+        print ("Checking sunset at ", str(datetime.now().replace(tzinfo=pytz.UTC)))
+        
+        city_name = 'Madrid'
+        a = Astral()
+        a.solar_depression = 'civil'
+        city = a[city_name]
+        sun = city.sun(date=datetime.today(), local=True)
+        
+        print ("\nPuesta del sol: " + str(sun['sunset'].replace(tzinfo=pytz.UTC)))
+        print ("Amanecer: " + str(sun['sunrise'].replace(tzinfo=pytz.UTC)) + "\n")
+
+        print ("Hora UTC: " + str(datetime.now().replace(tzinfo=pytz.UTC)) + "\n")
+
+        if ((datetime.now().replace(tzinfo=pytz.UTC) > sun['sunset'].replace(tzinfo=pytz.UTC)) and (esDeNoche != True)):
+            print ("Buenas noches, bajando persiana\n")
+            client.publish('acho/tts', '        Buenas noches, bajando persiana')
+            call(["curl", "http://root:opticalflow@" + ARDUINO + "/arduino/command/blinddown"])  
+            esDeNoche = True 
+        
+        if (datetime.today().weekday() >= 0 and datetime.today().weekday() < 5 and 
+        datetime.now().replace(tzinfo=pytz.UTC) > sun['sunrise'].replace(tzinfo=pytz.UTC) and 
+        datetime.now().replace(tzinfo=pytz.UTC) < sun['sunset'].replace(tzinfo=pytz.UTC) and (esDeDia != True)):
+            print ("        Buenos dias, subiendo persiana\n")
+            client.publish('acho/tts', 'Buenos dias')
             call(["curl", "http://root:opticalflow@" + ARDUINO + "/arduino/command/blindup"])    
-
-        time.sleep(60*10)
-
+            esDeDia = True
+        
+        time.sleep(300)
+            
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
-client.connect("localhost", 1883, 60)
-print "Connected to Mosquitto broker"
+client.connect("salareuniones.local", 1883, 60)
+print ("Connected to Mosquitto broker")
 
 try:
-   thread.start_new_thread( client.loop_forever, () )
-   thread.start_new_thread( blindController, () )
+   _thread.start_new_thread(client.loop_forever, ()) 
+   _thread.start_new_thread(blindController, ())
 except:
-   print "Error: unable to start thread"
+   print ("Error: unable to start thread")
 
 while True:
     time.sleep(0.1)

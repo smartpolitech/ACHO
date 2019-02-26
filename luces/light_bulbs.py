@@ -16,9 +16,9 @@ for d in devices:
 
 bombilla1 = 'd0:73:d5:10:7b:0e'
 bombilla2 = 'd0:73:d5:10:7f:33'
-#devices = {}
-#devices[bombilla1] = Light(bombilla1, 1, 56700, 542952283, "192.168.0.102")
-#devices[bombilla2] = Light(bombilla2, 1, 56700, 542952283, "192.168.0.103")
+devices = {}
+devices[bombilla1] = Light(bombilla1, 1, 56700, 542952283, "192.168.0.102")
+devices[bombilla2] = Light(bombilla2, 1, 56700, 542952283, "192.168.0.103")
 
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code " + str(rc))
@@ -26,13 +26,20 @@ def on_connect(client, userdata, flags, rc):
 
 def turn_light_on(lights):
 	for l in lights:
-		d = [x for x in devices if x.mac_addr == l][0]
-		d.set_power("on");
+		print l, devices
+		if l in devices.keys():
+			print "powering", l 
+			d.set_power("on");
+		else:
+			print "Bulb with mac", l, "not found"
     
 def turn_light_off(lights):
 	for l in lights:
-		d = [x for x in devices if x.mac_addr == l][0]
-		d.set_power("off")
+		if l in devices.keys():
+			print "powering off", l 
+			d.set_power("off")
+		else:
+			print "Bulb with mac" , l, "not found"
 		
 topics = {"acho/lights/on/all":  { "command": turn_light_on, "params": [bombilla1, bombilla2], "text": "encendiendo luces" },
 		  "acho/lights/off/all": { "command": turn_light_off, "params": [bombilla1, bombilla2],  "text": "apagando luces" },
