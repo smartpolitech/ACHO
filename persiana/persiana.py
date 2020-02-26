@@ -11,7 +11,7 @@ from pytz import timezone
 import pytz
 from subprocess import call
 
-ARDUINO = "192.168.0.101"
+ARDUINO = "192.168.0.106"
 tiempo = 0
 posicion_persiana = 0
 isSubiendo = False
@@ -56,24 +56,21 @@ def parar_persiana():
     client.publish('acho/tts', '        Parando persiana')
     call(["curl", "http://root:opticalflow@" +ARDUINO + "/arduino/command/blindstop"])
 
+
+# Secc es un numero del 1 al 5, 1 es 1/5 y el 5 el recorrido entero
+
 def bajar_persiana_por_seccion(secc):
-    global posicion_persiana
-    initTiempo(False)
+    client.publish('acho/tts', '        Buenas noches, bajando persiana')
     call(["curl", "http://root:opticalflow@" + ARDUINO + "/arduino/command/blinddown"])
     print("Bajando persiana a tramos.")
-    time.sleep(calculaTiempoSeccion())
-    #Restamos al tiempo acumulado de la persiana el tiempo dedicado para la bajada ejecutada 
-    finTiempo()
+    time.sleep(secc*4)
     parar_persiana()
 	
 def subir_persiana_por_seccion(secc):
-    global posicion_persiana
-    initTiempo(True)
+    client.publish('acho/tts', 'Buenos dias')
     call(["curl", "http://root:opticalflow@" + ARDUINO + "/arduino/command/blindup"])
     print("Subiendo persiana a tramos.")
-    time.sleep(calculaTiempoSeccion())
-    #Sumamos al tiempo acumulado de la persiana el tiempo dedicado para la subida ejecutada 
-    finTiempo()
+    time.sleep(secc*4)
     parar_persiana()
 
 # The callback for when the client receives a CONNACK response from the server.
@@ -146,7 +143,7 @@ def blindController():
             client.publish('acho/tts', 'Buenos dias')
             call(["curl", "http://root:opticalflow@" + ARDUINO + "/arduino/command/blindup"])    
             esDeDia = True
-        
+
         time.sleep(300)
             
 client = mqtt.Client()

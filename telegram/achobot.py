@@ -65,7 +65,7 @@ def retroceder(cid):
 def publish(topic):
 	client.reconnect()
 	client.publish(topic, "")
-
+#estos topics se usaban para saber si el comando recibido por texto era valido o no,pero ahora se envia el texto directamente al NPL y este ya dira si es valido o no.
 topics = {"persiana":  { "command": funpersiana, "params": "cid", "text": "" },
 		  "bombilla":  { "command": funbombilla, "params": "cid",  "text": "" },
   		  "television":{ "command": funtelevision, "params": "cid", "text" : "" },
@@ -95,12 +95,23 @@ def listener(messages):
                     if t["params"] == "cid":
                         t["command"](cid)
                     else:
-                        #t["command"](t["params"])
                         client.reconnect()
                         client.publish("acho/nlp", t["params"])
                         print("[✓] Enviando comando de Texto al NPL.", t["params"])
+                        #enviamos al tts (pasa el texto a voz y la reproduce) el comando
+                        client.reconnect()
+                        client.publish("acho/tts", t["params"])
+                        if DEBUG: print("[✓] Enviando comando de Texto al TTS.", t["params"])
+
                 else:
-                    print("[!] El comando recibido no es válido: " + m.text)
+                    #si el comando NO es un comando bien-conocido (los de las estructura topic), entonces se lo pasamos al NPL directamente
+                    client.reconnect()
+                    client.publish("acho/nlp", m.text)
+                    print("[✓] Enviando comando de Texto al NLP.", m.text)
+                    #enviamos al tts (pasa el texto a voz y la reproduce) el comando
+                    client.reconnect()
+                    client.publish("acho/tts", str(m.text + " recibido desde Telegram."))
+                    if DEBUG: print("[✓] Enviando comando de Texto al TTS.", m.text)
 
         elif m.content_type == 'voice':
             print("[✓] Detectado mensaje de voz.")

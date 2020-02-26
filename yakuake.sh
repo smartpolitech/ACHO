@@ -7,7 +7,7 @@ flag=0
 # keyvalue: key is a tab name and value is a program name
 # TODO: read json or xml key value
 # ["mosca"]="/home/smartpolitech/ACHO/mosca/mosca.sh" 
-declare -A dictOfComponents=( ["telegram"]="/home/smartpolitech/ACHO/telegram/achobot.py" ["tv"]="/home/smartpolitech/ACHO/tv/tv.py" ["lights"]="/home/smartpolitech/ACHO/luces/light_bulbs.py" ["ASR"]="/home/smartpolitech/ACHO/asr/achoASR.py" ["persiana"]="/home/smartpolitech/ACHO/persiana/persiana.py" ["tts"]="/home/smartpolitech/ACHO/tts/tts.py" ["nlp"]="/home/smartpolitech/ACHO/nlp/nlp.py" ["avatar"]="/home/smartpolitech/ACHO/avatar/avatar.py")
+declare -A dictOfComponents=( ["telegram"]="/home/smartpolitech/ACHO/telegram/achobot.py" ["tv"]="/home/smartpolitech/ACHO/tv/tv.py" ["lights"]="/home/smartpolitech/ACHO/luces/principal.py" ["persiana"]="/home/smartpolitech/ACHO/persiana/persiana.py" ["tts"]="/home/smartpolitech/ACHO/tts/tts.py" ["nlp"]="/home/smartpolitech/ACHO/nlp/nlp.py" ["avatar"]="/home/smartpolitech/ACHO/avatar/avatar.py" ["keyword"]="/home/smartpolitech/ACHO/keywordAsr/KeywordAsr/demo.py /home/smartpolitech/ACHO/keywordAsr/KeywordAsr/acho.pmdl" ["Command_Executor"]="/home/smartpolitech/ACHO/commandExecutor/CommandExecutor.py")
 
 for component in "${!dictOfComponents[@]}"
 do
@@ -32,7 +32,13 @@ do
                 qdbus org.kde.yakuake /yakuake/sessions org.kde.yakuake.addSession
 		sess=`qdbus org.kde.yakuake /yakuake/sessions org.kde.yakuake.activeSessionId`
 		qdbus org.kde.yakuake /yakuake/tabs org.kde.yakuake.setTabTitle $sess $component
-		qdbus org.kde.yakuake /yakuake/sessions org.kde.yakuake.runCommand "python ${dictOfComponents["$component"]}"
+		if test "$component" = "persiana"; then
+			qdbus org.kde.yakuake /yakuake/sessions org.kde.yakuake.runCommand "python3 ${dictOfComponents["$component"]}"
+		elif test "$component" = "telegram"; then
+			qdbus org.kde.yakuake /yakuake/sessions org.kde.yakuake.runCommand "python3 ${dictOfComponents["$component"]}"
+		else
+			qdbus org.kde.yakuake /yakuake/sessions org.kde.yakuake.runCommand "python ${dictOfComponents["$component"]}"
+		fi
                 sleep 1
         fi
 done
